@@ -36,5 +36,3 @@
 ```c++
 
 ```
-
-* **[链接](https://leetcode.cn/problems/two-sum/description/)**
