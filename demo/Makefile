@@ -1,6 +1,6 @@
 # 设置变量
 PWD  		:= 	$(shell pwd)
-TARGET		:= 	test
+TARGET		:= 	main
 SRC_DIR		:= 	src
 OBJ_DIR		:= 	obj
 SRCS		:= 	$(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cc $(SRC_DIR)/*.cxx $(SRC_DIR)/*.cpp)
