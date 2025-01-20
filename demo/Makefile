@@ -1,15 +1,16 @@
 # 设置变量
 PWD  		:= 	$(shell pwd)
-TARGET		:= 	a.out
+TARGET		:= 	test
 SRC_DIR		:= 	src
 OBJ_DIR		:= 	obj
-SRCS		:= 	$(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
-OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS)))
-#OBJS		:= 	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRCS		:= 	$(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cc $(SRC_DIR)/*.cxx $(SRC_DIR)/*.cpp)
+OBJS		:= 	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)  
+OBJS            :=      $(OBJS:$(SRC_DIR)/%.cc=$(OBJ_DIR)/%.o)
+OBJS            :=      $(OBJS:$(SRC_DIR)/%.cxx=$(OBJ_DIR)/%.o)
+OBJS            :=      $(OBJS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 
-
-# 设置编译器和编译选项
+# 指定编译器和编译选项
 CC		=	gcc
 CXX		=	g++
 CFLAGS		=	-Wall -Wextra -g -O0
@@ -19,32 +20,57 @@ CXXFLAGS	=	-Wall -Wextra -g -O0 -std=c++11
 
 # 编译
 .PHONY: all
-all: clean printVars $(TARGET)
+all: printVars clean $(TARGET)
 
 
 .PHONY: printVars
 printVars:
-	@echo
-	@echo "EXEC: " 
-	@echo "PWD: " $(PWD)
-	@echo "FILE LIST: " $(shell ls)
-	@echo
+	@echo "\033[0;32m信息参考：\033[0m"
+	@echo "          EXEC: ${TARGET}"
+	@echo "          PWD: $(PWD)"
+	@echo "          SRCS: $(SRCS)"
+	@echo "          OBJS: $(OBJS)"
+	@echo "          OBJ_DIR: $(OBJ_DIR)"
+	@echo "          FILE LIST: $(shell ls)"
+	
+help:
+	@echo "\033[0;32m使用说明：\033[0m"
+	@echo "          * 使用此 Makefile 前，先创建 src 目录，并将源码放入 src 目录"
+	@echo "          * 编译出的默认可执行文件名为 test，可自行修改 Makefile 中 TARGET 变量"
+	@echo "\033[0;32m可用选项：\033[0m"
+	@echo "          make                   上下文信息 && 编译"
+	@echo "          make all               和 make 等价"
+	@echo "          make run               运行目标程序（暂时不支持带参，可自行修改）"
+	@echo "          make debug             调试目标程序"
+	@echo "          make clean             清理文件"
+	@echo "          make help              你现在看到的"
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@echo "\033[0;32mOBJ  (C)：\033[0m" && echo -n "          "
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
+	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cxx
+	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
+	@echo "\033[0;32m目标文件：\033[0m" && echo -n "          "
 	$(CXX) $(CFLAGS) $^ -o $@
 
 	
 .PHONY: clean
 clean:
+	@echo "\033[0;32m文件清理：\033[0m" && echo -n "          "
 	rm -f $(OBJ_DIR)/*.o $(TARGET)
 
 
