@@ -14,9 +14,10 @@ OBJS            :=      $(OBJS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 CC		=	gcc
 CXX		=	g++
 CFLAGS		=	-Wall -Wextra -g -O0
-CXXFLAGS	=	-Wall -Wextra -g -O0 -std=c++11
+CXXFLAGS	=	-Wall -Wextra -g -O0 -std=c++17
 
-
+# 动态/静态库
+LIB		=	-ludev
 
 # 编译
 .PHONY: all
@@ -48,24 +49,24 @@ help:
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo "\033[0;32mOBJ  (C)：\033[0m" && echo -n "          "
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
 	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cxx
 	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "\033[0;32mOBJ (CC)：\033[0m" && echo -n "          "
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
 	@echo "\033[0;32m目标文件：\033[0m" && echo -n "          "
-	$(CXX) $(CFLAGS) $^ -o $@
+	$(CXX) $^ -o $@ $(CFLAGS) $(LIB)
 
 	
 .PHONY: clean
