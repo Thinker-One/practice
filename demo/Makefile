@@ -66,7 +66,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
 	@echo "\033[0;32m目标文件：\033[0m" && echo -n "          "
-	$(CXX) $^ -o $@ -g $(LIB)
+	$(CXX) $^ -o $@ $(CXXFLAGS) $(LIB)
 
 	
 .PHONY: clean
